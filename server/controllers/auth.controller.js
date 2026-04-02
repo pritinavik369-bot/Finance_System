@@ -1,22 +1,22 @@
-import errorHandler from "../utils/errorHandler.js";
+import {errorHandler} from "../utils/error.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 export const signin = async (req, res, next) => {
   try {
-    const { username, password } = req.body;
+    const { name, password } = req.body;
 
     if (
-      !username ||
+      !name ||
       !password ||
-      username.trim() === "" ||
+      name.trim() === "" ||
       password.trim() === ""
     ) {
       return next(errorHandler(400, "Username and password are required"));
     }
 
-    const validUser = await User.findOne({ username }).populate("role_id");
+    const validUser = await User.findOne({ name }).populate("role_id");
 
     if (!validUser) {
       return next(errorHandler(404, "User not found"));
@@ -35,9 +35,15 @@ export const signin = async (req, res, next) => {
       },
     );
 
-    res.json({ token });
+    const { password: pass, ...rest } = validUser._doc;
+    res
+      .status(200)
+      .cookie("access_token", token, {
+        httpOnly: true,
+      })
+      .json({ ...rest, token });
   } catch (error) {
-    errorHandler(res, error);
+    next(error);
   }
   res.json({ message: "Login route is working" });
 };
