@@ -9,7 +9,7 @@ import Dashboard from "./pages/Dashboard"
 /*import PrivateRoute from "./Compo/PrivateRoute"
 import OnlyAdminPrivateRoute from "./Compo/OnlyAdminPrivateRoute"
 
-import Header from "./Compo/Header"
+import Header from "./components/Header"
  import 'flowbite';// Ensure this is in your entry file
 import FooterCom from "./Compo/FooterCom"
 import CreatePost from "./pages/Admin/CreatePost"
