@@ -14,31 +14,31 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-white shadow">
+    <header className="bg-gradient-to-r from-pink-50 via-purple-50 to-white shadow-lg border-b border-purple-100">
       <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
         
-        <Link to="/" className="text-2xl font-bold text-blue-600">
+        <Link to="/" className="text-2xl font-bold text-purple-900">
           FinanceApp
         </Link>
 
         <nav className="hidden md:flex gap-6 items-center">
-          <Link to="/" className="text-gray-600 hover:text-gray-900 font-medium">
+          <Link to="/" className="text-purple-600 hover:text-purple-900 font-medium">
             Home
           </Link>
-          <Link to="/about" className="text-gray-600 hover:text-gray-900 font-medium">
+          <Link to="/about" className="text-purple-600 hover:text-purple-900 font-medium">
             About
           </Link>
-          <Link to="/contact" className="text-gray-600 hover:text-gray-900 font-medium">
+          <Link to="/contact" className="text-purple-600 hover:text-purple-900 font-medium">
             Contact
           </Link>
 
           {isAuthenticated() ? (
             <>
-              <Link to="/dashboard" className="text-gray-600 hover:text-gray-900 font-medium">
+              <Link to="/dashboard" className="text-purple-600 hover:text-purple-900 font-medium">
                 Dashboard
               </Link>
               {user?.role === 'admin' && (
-                <Link to="/users" className="text-gray-600 hover:text-gray-900 font-medium">
+                <Link to="/users" className="text-purple-600 hover:text-purple-900 font-medium">
                   Users
                 </Link>
               )}
@@ -56,13 +56,13 @@ export default function Header() {
                 </button>
 
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
-                    <div className="px-4 py-3 border-b border-gray-200">
-                      <p className="text-sm font-medium text-gray-800">{user?.email}</p>
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-3xl shadow-xl border border-purple-100 z-10">
+                    <div className="px-4 py-3 border-b border-purple-100">
+                      <p className="text-sm font-medium text-purple-800">{user?.email}</p>
                     </div>
                     <button
                       onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 font-medium"
+                      className="w-full text-left px-4 py-2 text-pink-600 hover:bg-pink-50 font-medium"
                     >
                       Sign Out
                     </button>

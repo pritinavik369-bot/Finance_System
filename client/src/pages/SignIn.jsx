@@ -38,39 +38,39 @@ export default function SignIn() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Sign In</h2>
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-100 to-white flex items-center justify-center p-4">
+      <div className="w-full max-w-md rounded-[2rem] bg-white/95 border border-purple-100 shadow-[0_25px_80px_rgba(168,85,247,0.14)] p-8">
+        <h2 className="text-3xl font-bold text-center text-purple-900 mb-8">Sign In</h2>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+          <div className="mb-4 p-3 bg-pink-50 border border-pink-200 text-pink-700 rounded-3xl">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-purple-700 mb-1">Email</label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="Enter your Admin email"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your email"
+              className="w-full px-4 py-3 border border-purple-200 rounded-3xl focus:outline-none focus:ring-2 focus:ring-pink-300"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label className="block text-sm font-medium text-purple-700 mb-1">Password</label>
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
               placeholder="Enter your password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 border border-purple-200 rounded-3xl focus:outline-none focus:ring-2 focus:ring-pink-300"
               required
             />
           </div>
@@ -78,14 +78,14 @@ export default function SignIn() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium py-2 rounded-lg transition"
+            className="w-full rounded-full bg-gradient-to-r from-pink-500 to-purple-500 text-white font-medium py-3 shadow-lg shadow-pink-200/50 transition hover:brightness-110 disabled:opacity-60"
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
 
-        <p className="text-center text-gray-600 mt-6">
-          Default credentials: email <code className="bg-gray-200 px-2 py-1 rounded">admin@gmail.com</code> password <code className="bg-gray-200 px-2 py-1 rounded">admin123</code>
+        <p className="text-center text-purple-600 mt-6">
+          Default credentials: email <code className="bg-purple-100 px-2 py-1 rounded-full">admin@gmail.com</code> password <code className="bg-purple-100 px-2 py-1 rounded-full">admin123</code>
         </p>
       </div>
     </div>

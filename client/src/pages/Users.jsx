@@ -23,11 +23,13 @@ export default function Users() {
   }
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Users Management</h1>
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-white p-6">
+      <div className="max-w-6xl mx-auto space-y-6">
+        <h1 className="text-3xl font-bold mb-4 text-purple-900">Users Management</h1>
 
-      <UserForm refresh={loadUsers} />
-      <UserTable users={list} refresh={loadUsers} />
+        <UserForm refresh={loadUsers} />
+        <UserTable users={list} refresh={loadUsers} />
+      </div>
     </div>
   );
 }

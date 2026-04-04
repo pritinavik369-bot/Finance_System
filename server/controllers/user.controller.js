@@ -3,6 +3,30 @@ import User from "../models/user.model.js";
 import { errorHandler } from "../middleware/error.js";
 import bcrypt from "bcryptjs";
 
+import Contact from "../models/contact.model.js";
+import nodemailer from 'nodemailer'
+import dotenv from 'dotenv'
+dotenv.config();
+ console.log("EMAIL_USER:", process.env.EMAIL_USER);
+
+//mailsending
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+transporter.verify((error, success) => {
+  if (error) {
+    console.error("Transporter error:", error);
+  } else {
+    console.log("Mailer is ready to send messages!");
+  }
+});
+
+
 // Create a new user - only admin
 export const createUser = async (req, res, next) => {
   try {
@@ -96,5 +120,54 @@ export const updateUser = async (req, res, next) => {
     res.status(200).json({ message: "User updated", user: updatedUser });
   } catch (error) {
     next(error);
+  }
+};
+
+
+
+export const ContactMe = async (req, res, next) => {
+  try {
+    const { name, email, message } = req.body;
+    console.log("Coming from contact.jsx:", name, email, message);
+
+    const userId = req.user?.userId || null; // Optional for public contact form
+
+    // Save message in database
+    const newMessage = new Contact({ userId, name, email, message });
+    await newMessage.save();
+
+    // **1️⃣ Send email to Admin**
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER, // Your email (Admin)
+      subject: `New Contact Message from ${name}`,
+      html: `
+        <h3>New Contact Request</h3>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Message:</strong> ${message}</p>
+      `,
+    });
+
+    // **2️⃣ Send Thank-You Email to User**
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email, // User's email
+      subject: "Thank You for Contacting Me!",
+      html: `
+        <h3>Hi ${name},</h3>
+        <p>Hey there! 😊 I truly appreciate you reaching out. Your message has been received, and I'll get back to you shortly. Looking forward to connecting!</p>
+        <br/>
+        <p>Best regards,</p>
+        <p><strong>Priti Navik</strong></p>
+      `,
+    });
+
+    // Success Response
+    res.status(201).json({ success: true, message: "Message sent successfully!" });
+
+  } catch (error) {
+    console.error("Error sending email:", error);
+    res.status(500).json({ success: false, message: "Something went wrong." });
   }
 };

@@ -1,6 +1,6 @@
 // routes/user.routes.js
 import express from "express";
-import { createUser, getUsers, deleteUser, updateUser } from "../controllers/user.controller.js";
+import { createUser, getUsers, deleteUser, updateUser , ContactMe } from "../controllers/user.controller.js";
 import verifyUser from "../middleware/verifyUser.js";
 
 import verifyRole from "../middleware/verifyRole.js";
@@ -19,5 +19,8 @@ router.delete("/deleteuser/:userId", verifyUser, verifyRole(["admin"]), deleteUs
 
 // Update a user by ID - only admin
 router.put("/updateuser/:userId", verifyUser, verifyRole(["admin"]), updateUser);
+
+// Contact form - public endpoint
+router.post('/contact', ContactMe);
 
 export default router;
