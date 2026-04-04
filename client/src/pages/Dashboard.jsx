@@ -159,6 +159,51 @@ export default function Dashboard() {
           </div>
         )}
 
+        {/* Monthly Trends */}
+        {summary?.monthlyTrends && summary.monthlyTrends.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold mb-4">Monthly Trends</h2>
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Income Trends */}
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 text-green-600">Income Trends</h3>
+                  <div className="space-y-2">
+                    {summary.monthlyTrends
+                      .filter(trend => trend._id.type === 'income')
+                      .slice(0, 6)
+                      .map((trend, index) => (
+                        <div key={index} className="flex justify-between items-center">
+                          <span className="text-sm text-gray-600">
+                            {trend._id.year}-{String(trend._id.month).padStart(2, '0')}
+                          </span>
+                          <span className="font-medium text-green-600">${trend.total.toFixed(2)}</span>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+                {/* Expense Trends */}
+                <div>
+                  <h3 className="text-lg font-semibold mb-4 text-red-600">Expense Trends</h3>
+                  <div className="space-y-2">
+                    {summary.monthlyTrends
+                      .filter(trend => trend._id.type === 'expense')
+                      .slice(0, 6)
+                      .map((trend, index) => (
+                        <div key={index} className="flex justify-between items-center">
+                          <span className="text-sm text-gray-600">
+                            {trend._id.year}-{String(trend._id.month).padStart(2, '0')}
+                          </span>
+                          <span className="font-medium text-red-600">${trend.total.toFixed(2)}</span>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Records Management - Only for analyst/admin */}
         {user.role !== 'viewer' && (
           <>
