@@ -1,5 +1,6 @@
 import FinancialRecord from "../models/record.model.js";
 import { errorHandler } from "../middleware/error.js";
+import mongoose from "mongoose";
 
 export const createRecord = async (req, res, next) => {
   try {
@@ -105,11 +106,11 @@ export const getSummary = async (req, res, next) => {
 
     // Total income and expenses
     const incomeTotal = await FinancialRecord.aggregate([
-      { $match: { user_id: userId, type: "income" } },
+      { $match: { user_id: new mongoose.Types.ObjectId(userId), type: "income" } },
       { $group: { _id: null, total: { $sum: "$amount" } } }
     ]);
     const expenseTotal = await FinancialRecord.aggregate([
-      { $match: { user_id: userId, type: "expense" } },
+      { $match: { user_id: new mongoose.Types.ObjectId(userId), type: "expense" } },
       { $group: { _id: null, total: { $sum: "$amount" } } }
     ]);
 
@@ -119,18 +120,18 @@ export const getSummary = async (req, res, next) => {
 
     // Category wise totals
     const categoryTotals = await FinancialRecord.aggregate([
-      { $match: { user_id: userId } },
+      { $match: { user_id: new mongoose.Types.ObjectId(userId) } },
       { $group: { _id: { category: "$category", type: "$type" }, total: { $sum: "$amount" } } }
     ]);
 
     // Recent activity (last 10)
-    const recentActivity = await FinancialRecord.find({ user_id: userId })
+    const recentActivity = await FinancialRecord.find({ user_id: new mongoose.Types.ObjectId(userId) })
       .sort({ date: -1 })
       .limit(10);
 
     // Monthly trends (last 12 months)
     const monthlyTrends = await FinancialRecord.aggregate([
-      { $match: { user_id: userId } },
+      { $match: { user_id: new mongoose.Types.ObjectId(userId) } },
       {
         $group: {
           _id: {

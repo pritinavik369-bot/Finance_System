@@ -3,6 +3,8 @@ import { errorHandler } from './error.js';
 
 const verifyUser = (req, res, next) => {
     const token = req.headers.authorization?.split(" ")[1] || req.cookies.access_token;
+
+    console.log("req.user:", req.user);
    // console.log(token, "in verify.js");
 
     if (!token) {

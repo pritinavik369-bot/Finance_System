@@ -6,14 +6,14 @@ import verifyRole from "../middleware/verifyRole.js";
 
 const router = express.Router();
 
-// Get summary for authenticated user
-router.get("/summary", verifyUser, getSummary);
+// Get summary for authenticated user (admin/analyst only)
+router.get("/summary", verifyUser, verifyRole(["admin", "analyst"]), getSummary);
 
 // Get all records for authenticated user (admin/analyst)
 router.get("/records", verifyUser, verifyRole(["admin", "analyst"]), getRecords);
 
 // Create a new record - admin/analyst
-router.post("/records", verifyUser, verifyRole(["admin", "analyst"]), createRecord);
+router.post("/records", verifyUser, verifyRole(["admin"]), createRecord);
 
 // Update a record - only admin
 router.put("/records/:id", verifyUser, verifyRole(["admin"]), updateRecord);

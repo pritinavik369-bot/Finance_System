@@ -52,7 +52,7 @@ server/ → Node.js backend
 
 ### 1. Clone the project
 
-git clone <your-repo-link>
+git clone https://github.com/pritinavik369-bot/Finance_System.git
 cd Finance_System
 
 ---

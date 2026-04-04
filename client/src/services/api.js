@@ -165,7 +165,7 @@ export const users = {
 };
 
 
-/*  CONTACT 
+
 export const contact = {
 
   // Send contact form data to backend
@@ -176,4 +176,4 @@ export const contact = {
       authenticated: false, // public form
     });
   },
-};*/
+};

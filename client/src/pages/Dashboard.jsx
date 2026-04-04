@@ -18,10 +18,10 @@ export default function Dashboard() {
     notes: '',
   });
 
-  // Load data on component mount
+  // Load data on component mount based on role
   useEffect(() => {
-    loadSummary();
-    if (user?.role !== 'viewer') {
+    if (user?.role === 'admin' || user?.role === 'analyst') {
+      loadSummary();
       loadRecords();
     }
   }, [user?.role]);
@@ -97,8 +97,8 @@ export default function Dashboard() {
           <p className="text-purple-600 text-lg">Welcome, {user?.name}</p>
         </div>
 
-        {/* Summary Cards */}
-        {summary && (
+        {/* Summary Cards - Visible to Admin and Analyst */}
+        {(user?.role === 'admin' || user?.role === 'analyst') && summary && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <div className="rounded-3xl border border-pink-100 bg-white/90 shadow-lg p-6">
               <p className="text-pink-600 text-sm font-medium mb-2">Total Income</p>
@@ -204,8 +204,18 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Records Management - Only for analyst/admin */}
-        {user.role !== 'viewer' && (
+        {/* Viewer Role Message */}
+        {user?.role === 'viewer' && (
+          <div className="rounded-3xl bg-gradient-to-r from-purple-100 to-pink-100 border-2 border-purple-300 shadow-lg p-8 mb-8">
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-purple-900 mb-2">👁️ Viewer Mode</h2>
+              <p className="text-purple-700 text-lg">You have read-only access to the dashboard. Contact an Admin or Analyst to create or manage financial records.</p>
+            </div>
+          </div>
+        )}
+
+        {/* Records Management - Only for admin/analyst */}
+        {(user?.role === 'admin' || user?.role === 'analyst') && (
           <>
             {/* Filters */}
             <div className="mb-8 rounded-3xl bg-white/85 border border-purple-100 shadow-lg p-6">
@@ -223,17 +233,18 @@ export default function Dashboard() {
               <button onClick={applyFilters} className="mt-4 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-pink-500 to-purple-500 px-5 py-2 text-white shadow-lg shadow-pink-200/50 transition hover:brightness-110">Apply Filters</button>
             </div>
 
-            {/* Form Toggle and Add Form */}
-            <div className="mb-8">
-              <button
-                onClick={() => setShowForm(!showForm)}
-                className="rounded-full bg-gradient-to-r from-pink-500 to-purple-500 text-white font-medium py-2 px-6 shadow-lg shadow-pink-200/50 transition hover:brightness-105"
-              >
-                {showForm ? 'Cancel' : 'Add Record'}
-              </button>
+            {/* Form Toggle and Add Form - Only for Admin */}
+            {user?.role === 'admin' && (
+              <div className="mb-8">
+                <button
+                  onClick={() => setShowForm(!showForm)}
+                  className="rounded-full bg-gradient-to-r from-pink-500 to-purple-500 text-white font-medium py-2 px-6 shadow-lg shadow-pink-200/50 transition hover:brightness-105"
+                >
+                  {showForm ? 'Cancel' : 'Add Record'}
+                </button>
 
-              {showForm && (
-                <form onSubmit={handleSubmit} className="mt-6 rounded-[2rem] bg-white/90 border border-purple-100 shadow-lg p-6">
+                {showForm && (
+                  <form onSubmit={handleSubmit} className="mt-6 rounded-[2rem] bg-white/90 border border-purple-100 shadow-lg p-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
                       <label className="block text-sm font-medium text-purple-700 mb-1">Amount</label>
@@ -302,45 +313,21 @@ export default function Dashboard() {
                     {loading ? 'Creating...' : 'Create Record'}
                   </button>
                 </form>
-              )}
-            </div>
+                )}
+              </div>
+            )}
 
-            {/* Records List */}
-            <div className="bg-white rounded-lg shadow overflow-hidden">
-              <h2 className="text-xl font-bold p-6 border-b">Financial Records</h2>
-              {loading ? (
-                <p className="p-6">Loading...</p>
-              ) : recordsList.length === 0 ? (
-                <p className="p-6">No records found.</p>
-              ) : (
-                <table className="w-full">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-4 py-2 text-left">Date</th>
-                      <th className="px-4 py-2 text-left">Type</th>
-                      <th className="px-4 py-2 text-left">Category</th>
-                      <th className="px-4 py-2 text-left">Amount</th>
-                      <th className="px-4 py-2 text-left">Notes</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {recordsList.map((record) => (
-                      <tr key={record._id} className="border-t">
-                        <td className="px-4 py-2">{new Date(record.date).toLocaleDateString()}</td>
-                        <td className="px-4 py-2">{record.type}</td>
-                        <td className="px-4 py-2">{record.category}</td>
-                        <td className="px-4 py-2">${record.amount.toFixed(2)}</td>
-                        <td className="px-4 py-2">{record.notes}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
+            {/* Analyst View Message */}
+            {user?.role === 'analyst' && (
+              <div className="rounded-3xl bg-gradient-to-r from-blue-100 to-purple-100 border-2 border-blue-300 shadow-lg p-6 mb-8">
+                <p className="text-blue-800 font-medium">📊 You can view and analyze records, but only Admins can create or modify records.</p>
+              </div>
+            )}
           </>
         )}
 
-        {/* Records Table */}
+        {/* Records Table - Only show for admin/analyst */}
+        {(user?.role === 'admin' || user?.role === 'analyst') && (
         <div className="bg-white/90 rounded-[2rem] shadow-xl border border-purple-100 overflow-hidden">
           <div className="px-6 py-4 border-b border-purple-100 bg-gradient-to-r from-pink-50 to-purple-50">
             <h2 className="text-xl font-bold text-purple-800">Records</h2>
@@ -391,6 +378,7 @@ export default function Dashboard() {
             </div>
           )}
         </div>
+        )}
       </div>
     </div>
   );
