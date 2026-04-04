@@ -34,7 +34,7 @@ export const signin = async (req, res, next) => {
       { userId: validUser._id, role },
       process.env.JWT_SECRET,
       {
-        expiresIn: "1h",
+        expiresIn: "10h",
       },
     );
 
