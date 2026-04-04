@@ -10,10 +10,13 @@ It helps users to manage income and expenses and track financial records easily.
 * UserAdmin Authentication (JWT & Cookies)
 * Role-based access (Admin, Analyst, Viewer)
 * Add, update, delete financial records
+* Add, update, delete Users by Admin Only
 * Dashboard with summary (Income, Expense, Balance)
 * Filter records (date, category, type)
 * Secure API with rate limiting
 * Responsive UI
+* Contact form with Nodemailer still in progress
+
 
 ---
 
