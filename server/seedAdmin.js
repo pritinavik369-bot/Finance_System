@@ -13,7 +13,10 @@ const seedAdmin = async () => {
     const existingAdmin = await User.findOne({ email: "admin@gmail.com" });
 
     if (existingAdmin) {
-      console.log("Admin already exists");
+      // update role
+      existingAdmin.role = "admin";
+      await existingAdmin.save();
+      console.log("Admin role updated");
       process.exit();
     }
 
@@ -25,7 +28,7 @@ const seedAdmin = async () => {
       name: "Admin",
       email: "admin@gmail.com",
       password: hashedPassword,
-      role: "Admin",
+      role: "admin",
     });
 
     console.log(" Admin created successfully");

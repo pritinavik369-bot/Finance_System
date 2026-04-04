@@ -1,22 +1,22 @@
-import {errorHandler} from "../utils/error.js";
+import {errorHandler} from "../middleware/error.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 export const signin = async (req, res, next) => {
   try {
-    const { name, password } = req.body;
+    const { email, password } = req.body;
 
     if (
-      !name ||
+      !email ||
       !password ||
-      name.trim() === "" ||
+      email.trim() === "" ||
       password.trim() === ""
     ) {
-      return next(errorHandler(400, "Username and password are required"));
+      return next(errorHandler(400, "Email and password are required"));
     }
 
-    const validUser = await User.findOne({ name }).populate("role_id");
+    const validUser = await User.findOne({ email });
 
     if (!validUser) {
       return next(errorHandler(404, "User not found"));
@@ -26,9 +26,12 @@ export const signin = async (req, res, next) => {
     if (!isPasswordValid) {
       return next(errorHandler(400, "Invalid password"));
     }
+    // Use role from user
+    const role = validUser.role;
+
     // Generate JWT token
     const token = jwt.sign(
-      { userId: validUser._id, role: validUser.role_id.role_name },
+      { userId: validUser._id, role },
       process.env.JWT_SECRET,
       {
         expiresIn: "1h",
@@ -45,7 +48,6 @@ export const signin = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-  res.json({ message: "Login route is working" });
 };
 
 /*export const signup = async (req, res) => {

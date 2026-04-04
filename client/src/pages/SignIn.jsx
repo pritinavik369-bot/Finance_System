@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { auth } from '../services/api';
 
 export default function SignIn() {
-  const [formData, setFormData] = useState({ name: '', password: '' });
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { login } = useAuth();
@@ -19,7 +19,7 @@ export default function SignIn() {
     setLoading(true);
     setError(null);
 
-    const result = await auth.signin(formData.name, formData.password);
+    const result = await auth.signin(formData.email, formData.password);
     
     if (result.success) {
       const userData = {
@@ -50,13 +50,13 @@ export default function SignIn() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
             <input
-              type="text"
-              name="name"
-              value={formData.name}
+              type="email"
+              name="email"
+              value={formData.email}
               onChange={handleChange}
-              placeholder="Enter your username"
+              placeholder="Enter your Admin email"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
@@ -85,7 +85,7 @@ export default function SignIn() {
         </form>
 
         <p className="text-center text-gray-600 mt-6">
-          Default credentials: username <code className="bg-gray-200 px-2 py-1 rounded">Admin</code> password <code className="bg-gray-200 px-2 py-1 rounded">admin123</code>
+          Default credentials: email <code className="bg-gray-200 px-2 py-1 rounded">admin@gmail.com</code> password <code className="bg-gray-200 px-2 py-1 rounded">admin123</code>
         </p>
       </div>
     </div>
